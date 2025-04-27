@@ -6,7 +6,32 @@ class Timer extends Component {
     color: "#" + Math.floor(Math.random() * 16777215).toString(16)
   };
 
-  // add your code here
+  // componentDidMount sets up the interval to call clockTick every second
+  componentDidMount() {
+    this.interval = setInterval(this.clockTick, 1000);
+  }
+
+  // componentWillUnmount clears the interval to prevent memory leaks
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  // Updates the state every second
+  clockTick = () => {
+    this.setState(prevState => ({
+      time: prevState.time + 1
+    }));
+  };
+
+  // Stops the clock by clearing the interval
+  stopClock = () => {
+    clearInterval(this.interval);
+  };
+
+  // Removes this timer from the list in App.js
+  handleClose = () => {
+    this.props.removeTimer(this.props.id);
+  };
 
   render() {
     const { time, color } = this.state;
@@ -19,22 +44,6 @@ class Timer extends Component {
       </section>
     );
   }
-
-  //clock functions
-  clockTick = () => {
-    this.setState(prevState => ({
-      time: prevState.time + 1
-    }));
-  };
-
-  stopClock = () => {
-    clearInterval(this.interval);
-  };
-
-  // for the 'x' button,
-  handleClose = () => {
-    this.props.removeTimer(this.props.id);
-  };
 }
 
 export default Timer;
